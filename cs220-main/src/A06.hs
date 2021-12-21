@@ -41,19 +41,19 @@ instance CoreState (StateT RegFile (StateT ShrMem IO)) where
     regFile |> Map.insert reg val |> RegFile |> put
 
   memL loc = do
-    shrmem <- lift get
-    lift  (lift (loadShrMem loc shrmem) )
+    shrmem <- lift get 
+    loadShrMem loc shrmem |> lift |> lift
 
     
 
   memS loc val = do
     shrmem <- lift get
-    lift (lift (storeShrMem loc val shrmem))
+    storeShrMem loc val shrmem |> lift |> lift
 
 
   memCas loc val1 val2 = do
     shrmem <- lift get
-    lift (lift (casShrMem loc val1 val2 shrmem))
+    casShrMem loc val1 val2 shrmem |> lift |> lift
 
     
 
